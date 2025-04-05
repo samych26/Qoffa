@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'login_view.dart';
+import 'customer/login_customer.dart';
+import 'business/login_business.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
@@ -136,92 +137,96 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
 
   Widget _buildLastPage() {
-    return Column(
-      children: [
-        Expanded(
-          flex: 10,
-          child: Container(
-            width: double.infinity,
-            color: Color(0xFFFEFFFC), // Fond supérieur vert clair
-            child: Center(
-              child: Image.asset("assets/images/onboarding4.png", width: 300),
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 6,
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Color(0xFF1D5049),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(32),
-                topRight: Radius.circular(32),
+    return Container(
+      color: Color(0xFFFFFFFF), // Fond global
+      child: Column(
+        children: [
+          Expanded(
+            flex: 10,
+            child: Container(
+              width: double.infinity,
+              color: Colors.white, // Fond supérieur
+              child: Center(
+                child: Image.asset("assets/images/onboarding4.png", width: 300),
               ),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Tell us who you are !",
-                  style: TextStyle(
-                    color: Color(0xFFF3E9B5),
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+          ),
+          Expanded(
+            flex: 6,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Color(0xFF1D5049),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(32),
+                  topRight: Radius.circular(32),
                 ),
-                SizedBox(height: 44),
-                SizedBox(
-                  width: 160,
-                  height: 45,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFF3E9B5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Tell us who you are !",
+                    style: TextStyle(
+                      color: Color(0xFFF3E9B5),
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginView(userType: "Customer"),
-                        ),
-                      );
-                    },
-                    child: Text("Customer", style: TextStyle(color: Colors.black)),
                   ),
-                ),
-                SizedBox(height: 16),
-                SizedBox(
-                  width: 160,
-                  height: 45,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFF3E9B5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                  SizedBox(height: 44),
+                  SizedBox(
+                    width: 160,
+                    height: 45,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFFF3E9B5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
                       ),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CustomerLoginPage(),
+                          ),
+                        );
+                      },
+                      child: Text("Customer", style: TextStyle(color: Colors.black)),
                     ),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginView(userType: "Business"),
-                        ),
-                      );
-                    },
-                    child: Text("Business", style: TextStyle(color: Colors.black)),
                   ),
-                ),
-              ],
+                  SizedBox(height: 16),
+                  SizedBox(
+                    width: 160,
+                    height: 45,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFFF3E9B5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BusinessLoginPage(),
+                          ),
+                        );
+                      },
+                      child: Text("Business", style: TextStyle(color: Colors.black)),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
+
 
 
   Widget _buildProgressIndicator(int index) {

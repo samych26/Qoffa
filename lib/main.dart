@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'views/onboarding_view.dart';
-import 'views/login_view.dart';
+import 'views/customer/login_customer.dart';
+import 'views/business/login_business.dart';
 
 void main() {
   runApp(QoffaApp());
@@ -45,10 +46,17 @@ class _SplashScreenState extends State<SplashScreen> {
         MaterialPageRoute(builder: (context) => OnboardingScreen()),
       );
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginView(userType: userType ?? "Customer")),
-      );
+      if (userType == "Business") {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => BusinessLoginPage()),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => CustomerLoginPage()),
+        );
+      }
     }
   }
 
