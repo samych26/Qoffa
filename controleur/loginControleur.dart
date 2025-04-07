@@ -1,17 +1,25 @@
 import '../modele/login.dart';
 
-class Controleurlogin {
+class loginControleur {
   final String identifiant;
   final String motDePasse;
   final login _modele = login();
 
-  Controleurlogin({required this.identifiant, required this.motDePasse});
+  // Variables de sortie
+  bool estValide = false;
+  String typeUtilisateur = '';
 
-  // Méthode asynchrone pour vérifier la connexion
+  loginControleur({required this.identifiant, required this.motDePasse});
+
   Future<void> verifierConnexion() async {
-    bool estValide = await _modele.authentifier(identifiant, motDePasse);
+    Map<String, dynamic> resultat = await _modele.authentifier(identifiant, motDePasse);
+
+    estValide = resultat['estValide'];
+    typeUtilisateur = resultat['typeUtilisateur'];
+
     if (estValide) {
       print('Connexion réussie');
+      print('Type d\'utilisateur : $typeUtilisateur');
     } else {
       print('Identifiant ou mot de passe incorrect');
     }
