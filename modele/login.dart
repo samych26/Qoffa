@@ -1,33 +1,41 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ModeleConnexion {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+class login {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Authentifier l'utilisateur avec Firebase Authentication
-  Future<bool> authentifier(String identifiant, String motDePasse) async {
+//methode pour que l'utilisateur se connecte à l'application et retourner le type de son compte
+  Future<Map<String, dynamic>> authentifier(String email, String motDePasse) async {
     try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: identifiant,
-        password: motDePasse,
-      );
-      return userCredential.user != null;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('Aucun utilisateur trouvé pour cet email.');
-      } else if (e.code == 'wrong-password') {
-        print('Mot de passe incorrect.');
-      } else {
-        print("Erreur Firebase: ${e.message}");
+      QuerySnapshot snapshot = await _firestore
+          .collection('Utilisateur')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
+
+      if (snapshot.docs.isEmpty) {
+        print("Aucun utilisateur trouvé avec cet email.");
+        return {'estValide': false, 'typeUtilisateur': ''};
       }
-      return false;
+
+      var userData = snapshot.docs.first.data() as Map<String, dynamic>;
+      String mdpStocke = userData['motDePasse'];
+
+      if (motDePasse == mdpStocke) {
+        String typeUtilisateur = userData['typeUtilisateur'];
+        print("Connexion réussie !");
+        return {'estValide': true, 'typeUtilisateur': typeUtilisateur};
+      } else {
+        print("Mot de passe incorrect.");
+        return {'estValide': false, 'typeUtilisateur': ''};
+      }
     } catch (e) {
-      print("Erreur inconnue: $e");
-      return false;
+      print("Erreur lors de la connexion : $e");
+      return {'estValide': false, 'typeUtilisateur': ''};
     }
   }
-
-  // Déconnecter l'utilisateur
+// methode pour se deconnecter
   Future<void> deconnecter() async {
     await _auth.signOut();
   }
+  
 }
