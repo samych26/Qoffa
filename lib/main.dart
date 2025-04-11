@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _navigateToNext() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 5));
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool firstLaunch = prefs.getBool('firstLaunch') ?? true;
     String? userType = prefs.getString('userType');
@@ -63,14 +63,26 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFD6EE8F),
-      body: Center(
-        child: Image.asset(
-          'assets/images/logo.png',
-          width: 204.3,
-          height: 250,
-        ),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Image de fond
+          Image.asset(
+            'assets/images/bg_splash.png',
+            fit: BoxFit.cover,
+          ),
+
+          // Logo centré
+          Center(
+            child: Image.asset(
+              'assets/images/logo.png',
+              width: 204.3,
+              height: 250,
+            ),
+          ),
+        ],
       ),
     );
   }
+
 }
