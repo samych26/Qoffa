@@ -113,7 +113,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ),
         // Overlay + contenu
         Container(
-          color: Color(0xFFD3FF56).withOpacity(0),
+          color: Color(0xFFF3E9B5).withOpacity(0),
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 48),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -123,7 +123,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 "Tell us who you are!",
                 style: TextStyle(
                   fontSize: 26,
-                  color: Color(0xFFD3FF56),
+                  color: Color(0xFFF3E9B5),
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.left,
@@ -133,7 +133,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 "Choose your profile to get started.",
                 style: TextStyle(
                   fontSize: 16,
-                  color: Color(0xFFD3FF56),
+                  color: Color(0xFFF3E9B5),
                 ),
                 textAlign: TextAlign.left,
               ),
@@ -149,7 +149,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFD3FF56),
+                    backgroundColor: Color(0xFFF3E9B5),
                     foregroundColor: Colors.black,
                     padding: EdgeInsets.symmetric(vertical: 14, horizontal: 24),
                     shape: RoundedRectangleBorder(
@@ -182,7 +182,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFD3FF56),
+                    backgroundColor: Color(0xFFF3E9B5),
                     foregroundColor: Colors.black,
                     padding: EdgeInsets.symmetric(vertical: 14, horizontal: 24),
                     shape: RoundedRectangleBorder(
