@@ -28,7 +28,7 @@ class _SignUpViewState extends State<SignUpView> {
       email: emailController.text.trim(),
       motDePasse: passwordController.text,
       confirmationMotDePasse: passwordController.text,
-      adresseClient: "", // Valeur vide, tu peux l’ignorer dans le contrôleur
+      adresseClient: "", 
       numTelClient: phoneController.text.trim(),
     );
 
