@@ -211,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
   height: 56,
   child: OutlinedButton(
     onPressed: () {
-      Navigator.pushNamed(context, '/signup_customer'); // Doit correspondre exactement à la route définie
+      Navigator.pushNamed(context, '/signup_customer'); 
     },
     style: OutlinedButton.styleFrom(
       foregroundColor: Colors.black,
