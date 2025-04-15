@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'customer/login_customer.dart';
-import 'business/login_business.dart';
+import 'package:qoffa/views/login_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -60,9 +59,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    _pageController.nextPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => LoginPage()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -143,10 +142,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (_) => CustomerLoginPage()),
-                    );
+
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFF3E9B5),
@@ -176,10 +172,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (_) => BusinessLoginPage()),
-                    );
+
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFF3E9B5),

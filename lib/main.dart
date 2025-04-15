@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart'; // Firebase core
 import 'views/onboarding_view.dart';
-import 'views/customer/login_customer.dart';
-import 'views/business/login_business.dart';
+import 'views/login_page.dart';
+import 'services/firestore_init_service.dart';
 
-void main() {
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await FirestoreInitService().createEmptyCollections(); // Appel unique
   runApp(QoffaApp());
 }
+
 
 class QoffaApp extends StatelessWidget {
   @override
@@ -35,28 +41,23 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _navigateToNext() async {
-    await Future.delayed(Duration(seconds: 5));
+    await Future.delayed(Duration(seconds: 3));
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool firstLaunch = prefs.getBool('firstLaunch') ?? true;
-    String? userType = prefs.getString('userType');
 
     if (firstLaunch) {
+      prefs.setBool('firstLaunch', false);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => OnboardingScreen()),
       );
     } else {
-      if (userType == "Business") {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => BusinessLoginPage()),
-        );
-      } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => CustomerLoginPage()),
-        );
-      }
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+
+
+      );
     }
   }
 
@@ -66,13 +67,10 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Image de fond
           Image.asset(
             'assets/images/bg_splash.png',
             fit: BoxFit.cover,
           ),
-
-          // Logo centré
           Center(
             child: Image.asset(
               'assets/images/logo.png',
@@ -84,5 +82,4 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
-
 }

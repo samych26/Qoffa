@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "195739454685",
+    "project_id": "qoffa-58638",
+    "storage_bucket": "qoffa-58638.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:195739454685:android:ba658dfd936bf8666ddf34",
+        "android_client_info": {
+          "package_name": "com.qoffa.qoffa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnT8Li3I7N3G-tl8ljBPcI2xDeamTVGHI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

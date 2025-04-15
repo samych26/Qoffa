@@ -13,6 +13,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   shared_preferences: ^2.2.0
   flutter_svg: ^2.0.17
+  firebase_core: ^2.27.0
+  cloud_firestore: ^4.15.8
 
 dev_dependencies:
   flutter_test:
@@ -30,7 +32,21 @@ flutter:
     - family: Inter
       fonts:
         - asset: assets/fonts/Inter_28pt-Light.ttf
-        - asset: assets/fonts/Inter_28pt-Black.ttf
-        - asset: assets/fonts/Inter_28pt-Medium.ttf
+          weight: 300
         - asset: assets/fonts/Inter_28pt-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Inter_28pt-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter_28pt-Black.ttf
+          weight: 900
+
+    - family: LeagueSpartan
+      fonts:
+        - asset: assets/fonts/LeagueSpartan-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/LeagueSpartan-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/LeagueSpartan-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/LeagueSpartan-Black.ttf
           weight: 900
