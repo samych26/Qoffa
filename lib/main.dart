@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _navigateToNext() async {
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 2));
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool firstLaunch = prefs.getBool('firstLaunch') ?? true;
 

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/gestures.dart';
+import 'package:qoffa/views/user_type_selection.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -26,11 +29,11 @@ class _LoginPageState extends State<LoginPage> {
 
           // 💬 Contenu principal
           SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 80),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 134),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 80),
+                const SizedBox(height: 50),
 
                 const Text(
                   "Welcome Back!",
@@ -52,7 +55,8 @@ class _LoginPageState extends State<LoginPage> {
                 const Text(
                   "Email",
                   style: TextStyle(
-                    fontFamily: 'LeagueSpartan',       // ou 'LeagueSpartan' selon ta préférence
+                    fontFamily:
+                        'LeagueSpartan', // ou 'LeagueSpartan' selon ta préférence
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
@@ -64,18 +68,18 @@ class _LoginPageState extends State<LoginPage> {
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     labelText: "Email",
-                    labelStyle: const TextStyle(color: Colors.white70),
+                    labelStyle: const TextStyle(color: Color(0xFFF3E9B5)),
                     hintText: "you@example.com",
-                    hintStyle: const TextStyle(color: Colors.white38),
+                    hintStyle: const TextStyle(color: Color(0xFFF3E9B5)),
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.1),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Colors.white54),
+                      borderSide: const BorderSide(color: Color(0xFFF3E9B5)),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Colors.white),
+                      borderSide: const BorderSide(color: Color(0xFFF3E9B5)),
                     ),
                   ),
                   cursorColor: Colors.white,
@@ -87,7 +91,8 @@ class _LoginPageState extends State<LoginPage> {
                 const Text(
                   "Password",
                   style: TextStyle(
-                    fontFamily: 'LeagueSpartan',       // ou 'LeagueSpartan' selon ta préférence
+                    fontFamily:
+                        'LeagueSpartan', // ou 'LeagueSpartan' selon ta préférence
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
@@ -99,24 +104,25 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: _obscurePassword,
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
-
-                    labelStyle: const TextStyle(color: Colors.white70),
+                    labelStyle: const TextStyle(color: Color(0xFFF3E9B5)),
                     hintText: "Enter your password",
-                    hintStyle: const TextStyle(color: Colors.white38),
+                    hintStyle: const TextStyle(color: Color(0xFFF3E9B5)),
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.1),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Colors.white54),
+                      borderSide: const BorderSide(color: Color(0xFFF3E9B5)),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Colors.white),
+                      borderSide: const BorderSide(color: Color(0xFFF3E9B5)),
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                        color: Colors.white70,
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Color(0xFFF3E9B5),
                       ),
                       onPressed: () {
                         setState(() {
@@ -133,7 +139,8 @@ class _LoginPageState extends State<LoginPage> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {},
-                    child: const Text("Forgot Password?", style: TextStyle(color: Colors.white)),
+                    child: const Text("Forgot Password?",
+                        style: TextStyle(color: Colors.white)),
                   ),
                 ),
 
@@ -148,65 +155,40 @@ class _LoginPageState extends State<LoginPage> {
                       backgroundColor: const Color(0xFFF3E9B5),
                       foregroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)),
                     ),
                     child: const Text("Log In", style: TextStyle(fontSize: 16)),
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 34),
 
-                const Center(
-                  child: Text(
-                    "or sign up with",
-                    style: TextStyle(color: Colors.white70),
-                  ),
-                ),
 
-                const SizedBox(height: 16),
-
-                // 🔘 Google
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton.icon(
-                    onPressed: () {},
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                    ),
-                    icon: SvgPicture.asset(
-                      'assets/icons/google.svg',
-                      height: 24,
-                    ),
-                    label: const Text("Sign up with Google"),
-                  ),
-                ),
-
-                const SizedBox(height: 24),
 
                 // ❓ Already have account?
                 Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      // Action pour aller à la page d'inscription
-                    },
-                    child: const Text.rich(
-                      TextSpan(
-                        text: "Don't have an account? ",
-                        style: TextStyle(color: Colors.white70),
-                        children: [
-                          TextSpan(
-                            text: "Sign up",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
-                            ),
+                  child: RichText(
+                    text: TextSpan(
+                      text: "Don't have an account? ",
+                      style: const TextStyle(color: Colors.white70),
+                      children: [
+                        TextSpan(
+                          text: "Sign up",
+                          style: const TextStyle(
+                            color: Color(0xFFF3E9B5),
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
                           ),
-                        ],
-                      ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => UserTypeSelectionPage()),
+                              );
+                            },
+                        ),
+                      ],
                     ),
                   ),
                 )
