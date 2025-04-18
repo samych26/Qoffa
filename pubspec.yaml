@@ -15,7 +15,7 @@ dependencies:
   flutter_svg: ^2.0.17
   firebase_core: ^2.27.0
   cloud_firestore: ^4.15.8
-  file_picker: ^6.1.1
+  file_picker: 6.1.1
   dropdown_button2: ^2.3.9
 
 dev_dependencies:
