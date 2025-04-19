@@ -3,14 +3,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart'; // Firebase core
 import 'views/onboarding_view.dart';
 import 'views/login_page.dart';
-import 'services/firestore_init_service.dart';
+import 'package:provider/provider.dart';
+import 'controllers/auth_controller.dart';
+import 'controllers/customer/signup_controller.dart';
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await FirestoreInitService().createEmptyCollections(); // Appel unique
-  runApp(QoffaApp());
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthController()),
+        ChangeNotifierProvider(create: (_) => SignUpController()),
+      ],
+      child: QoffaApp(),
+    ),
+  );
 }
 
 

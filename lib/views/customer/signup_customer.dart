@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import '../../controllers/customer/signup_controller.dart';
 import '../login_page.dart';
 
 class ClientSignUpView extends StatefulWidget {
@@ -14,6 +16,8 @@ class _ClientSignUpViewState extends State<ClientSignUpView> {
   final TextEditingController _prenomController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+
   bool _obscurePassword = true;
 
   @override
@@ -22,12 +26,21 @@ class _ClientSignUpViewState extends State<ClientSignUpView> {
     _prenomController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
   void _handleSignUp() {
     if (_formKey.currentState!.validate()) {
-      // Logique d'inscription
+      final signupController = Provider.of<SignUpController>(context, listen: false);
+      signupController.registerClient(
+        context: context,
+        nom: _nomController.text.trim(),
+        prenom: _prenomController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+        phone: _phoneController.text.trim(),
+      );
     }
   }
 
@@ -38,11 +51,13 @@ class _ClientSignUpViewState extends State<ClientSignUpView> {
     );
   }
 
+  // Remplace la méthode _buildStyledField
   Widget _buildStyledField({
     required String label,
     required String hint,
     required TextEditingController controller,
     bool isPassword = false,
+    String? errorText,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,11 +84,15 @@ class _ClientSignUpViewState extends State<ClientSignUpView> {
             fillColor: Colors.white.withOpacity(0.1),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFFF3E9B5)),
+              borderSide: BorderSide(
+                color: errorText != null ? Colors.red : const Color(0xFFF3E9B5),
+              ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.white),
+              borderSide: BorderSide(
+                color: errorText != null ? Colors.red : Colors.white,
+              ),
             ),
             suffixIcon: isPassword
                 ? IconButton(
@@ -89,20 +108,24 @@ class _ClientSignUpViewState extends State<ClientSignUpView> {
             )
                 : null,
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return "Ce champ est requis";
-            }
-            return null;
-          },
           cursorColor: Colors.white,
         ),
+        if (errorText != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              errorText,
+              style: const TextStyle(color: Colors.red, fontSize: 12),
+            ),
+          ),
       ],
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
+    final signupController = context.watch<SignUpController>();
     return Scaffold(
       body: Stack(
         children: [
@@ -140,28 +163,63 @@ class _ClientSignUpViewState extends State<ClientSignUpView> {
                     label: "Nom",
                     hint: "Entrez votre nom",
                     controller: _nomController,
+                    errorText: context.watch<SignUpController>().nomError,
                   ),
                   const SizedBox(height: 16),
                   _buildStyledField(
                     label: "Prénom",
                     hint: "Entrez votre prénom",
                     controller: _prenomController,
+                    errorText: context.watch<SignUpController>().prenomError,
                   ),
                   const SizedBox(height: 16),
                   _buildStyledField(
                     label: "Email",
                     hint: "you@example.com",
                     controller: _emailController,
+                    errorText: context.watch<SignUpController>().emailError,
                   ),
+                  const SizedBox(height: 16),
+                  _buildStyledField(
+                    label: "Numéro de téléphone",
+                    hint: "06XXXXXXXX",
+                    controller: _phoneController,
+                    errorText: signupController.phoneError,
+                  ),
+
                   const SizedBox(height: 16),
                   _buildStyledField(
                     label: "Mot de passe",
                     hint: "Entrez votre mot de passe",
                     controller: _passwordController,
                     isPassword: true,
+                    errorText: context.watch<SignUpController>().passwordError,
                   ),
+
                   const SizedBox(height: 32),
 
+                  // Affiche le message de succès ou d’erreur
+                  if (signupController.successMessage != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Center(
+                        child: Text(
+                          signupController.successMessage!,
+                          style: const TextStyle(color: Colors.greenAccent, fontSize: 14),
+                        ),
+                      ),
+                    ),
+                  if (signupController.generalError != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Center(
+                        child: Text(
+                          signupController.generalError!,
+                          style: const TextStyle(color: Colors.redAccent, fontSize: 14),
+                        ),
+                      ),
+                    ),
+                  SizedBox(height: 12),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -175,7 +233,7 @@ class _ClientSignUpViewState extends State<ClientSignUpView> {
                         ),
                       ),
                       child: const Text(
-                        "Sign Up",
+                        "Create a account ",
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
@@ -208,7 +266,6 @@ class _ClientSignUpViewState extends State<ClientSignUpView> {
                         children: [
                           Align(
                             alignment: Alignment.centerLeft,
-
                             child: Padding(
                               padding: const EdgeInsets.only(left: 20),
                               child: SvgPicture.asset(
@@ -228,7 +285,6 @@ class _ClientSignUpViewState extends State<ClientSignUpView> {
                       ),
                     ),
                   ),
-
 
                   const SizedBox(height: 32),
 
