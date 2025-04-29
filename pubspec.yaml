@@ -15,10 +15,14 @@ dependencies:
   flutter_svg: ^2.0.17
   firebase_core: ^2.27.0
   cloud_firestore: ^4.15.8
-  file_picker: ^6.1.1
+  #file_picker: ^6.2.0
   dropdown_button2: ^2.3.9
-  firebase_auth: ^4.17.4
+  flutter_map: 6.1.0
+  latlong2: ^0.9.0
+  geolocator: ^9.0.1
   provider: ^6.1.1
+  firebase_auth: 4.16.0
+  geocoding: ^2.1.1
 
 dev_dependencies:
   flutter_test:
@@ -31,6 +35,16 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+    - assets/icons/pastry.png
+    - assets/icons/bakery.png
+    - assets/icons/restaurant.png
+    - assets/icons/market.png
+    - assets/icons/pastryJaune.png
+    - assets/icons/bakeryJaune.png
+    - assets/icons/marketJaune.png
+    - assets/icons/restaurantJaune.png
+    - assets/icons/home.png
+
 
   fonts:
     - family: Inter
