@@ -12,7 +12,12 @@
           "package_name": "com.qoffa.qoffa"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "195739454685-t9117bc6teoft9ddtj7mgmijlaeo3bnu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDnT8Li3I7N3G-tl8ljBPcI2xDeamTVGHI"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "195739454685-t9117bc6teoft9ddtj7mgmijlaeo3bnu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "195739454685-uispqvtmbrfrek8klpifbb217ugprmdr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.qoffa.qoffa"
+              }
+            }
+          ]
         }
       }
     }
