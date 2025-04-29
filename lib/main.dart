@@ -1,94 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_core/firebase_core.dart'; // Firebase core
-import 'views/onboarding_view.dart';
-import 'views/login_page.dart';
-import 'package:provider/provider.dart';
-import 'controllers/auth_controller.dart';
-import 'controllers/customer/signup_controller.dart';
+import 'package:provider/provider.dart'; // Importez le package provider
+import 'views/customer/HomePage.dart'; // Chemin d'importation corrigé
 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'Controllers/customer/PanierController.dart'; // Importez votre PanierController
+import 'services/PanierService.dart'; // Importez votre PanierService (si nécessaire pour créer PanierController)
+import 'Controllers/controlCommercant.dart'; // Importez votre CommercantController
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
 
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => AuthController()),
-        ChangeNotifierProvider(create: (_) => SignUpController()),
-      ],
-      child: QoffaApp(),
-    ),
-  );
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    print("Erreur lors de l'initialisation de Firebase: $e");
+  }
+
+  runApp(const MyApp());
 }
 
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-class QoffaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Qoffa',
+      title: 'Qoffa App',
       theme: ThemeData(
-        primaryColor: Color(0xFFD6EE8F),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
       ),
-      home: SplashScreen(),
-    );
-  }
-}
-
-class SplashScreen extends StatefulWidget {
-  @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    _navigateToNext();
-  }
-
-  Future<void> _navigateToNext() async {
-    await Future.delayed(Duration(seconds: 2));
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool firstLaunch = prefs.getBool('firstLaunch') ?? true;
-
-    if (firstLaunch) {
-      prefs.setBool('firstLaunch', false);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => OnboardingScreen()),
-      );
-    } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-
-
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            'assets/images/bg_splash.png',
-            fit: BoxFit.cover,
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider<PanierController>(
+            create: (context) => PanierController(PanierService()),
           ),
-          Center(
-            child: Image.asset(
-              'assets/images/logo.png',
-              width: 204.3,
-              height: 250,
-            ),
+          Provider<CommercantController>( // Utilisez Provider au lieu de ChangeNotifierProvider
+            create: (context) => CommercantController(),
           ),
         ],
+        child: const HomePage(),
       ),
     );
   }
