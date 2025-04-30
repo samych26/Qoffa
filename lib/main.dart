@@ -6,6 +6,8 @@ import 'views/login_page.dart';
 import 'package:provider/provider.dart';
 import 'controllers/auth_controller.dart';
 import 'controllers/customer/signup_controller.dart';
+import 'controllers/business/business_signup_controller.dart';
+
 
 
 void main() async {
@@ -17,6 +19,8 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthController()),
         ChangeNotifierProvider(create: (_) => SignUpController()),
+        ChangeNotifierProvider(create: (_) => BusinessSignUpController()),
+
       ],
       child: QoffaApp(),
     ),
