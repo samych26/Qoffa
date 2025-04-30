@@ -15,6 +15,7 @@ import '../../Models/modelCommercant.dart';
 import '../../services/serviceCommercant.dart';
 import '../../Controllers/controlCommercant.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:collection/collection.dart';
 
 // Extension pour obtenir le premier élément d'une Iterable qui satisfait une condition, ou null si aucun ne correspond.
 extension IterableExtension<T> on Iterable<T> {
@@ -38,6 +39,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   // Position initiale de la carte (Béjaïa par défaut).
   LatLng _mapPosition = LatLng(36.751000, 5.038556);
+  LatLng? _userLocation; // Nouvelle variable pour stocker la localisation de l'utilisateur
   late final MapController _mapController;
   // Niveau de zoom initial de la carte.
   double _mapZoom = 13.0;
@@ -64,7 +66,8 @@ class _HomePageState extends State<HomePage> {
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     // Met à jour l'état du widget avec les nouvelles coordonnées.
     setState(() {
-      _mapPosition = LatLng(position.latitude, position.longitude);
+      _userLocation = LatLng(position.latitude, position.longitude);
+      _mapPosition = _userLocation!; // Centre la carte sur la position de l'utilisateur
     });
   }
 
@@ -389,12 +392,81 @@ class _HomePageState extends State<HomePage> {
   // Widget pour construire la section "Close To You" affichant la carte des commerçants à proximité.
   Widget _buildCloseToYouSection(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Titre de la section avec un bouton "See All" pour afficher la carte en plein écran.
-          StreamBuilder<List<Commercant>>(
+        padding: const EdgeInsets.all(16),
+    child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    // Titre de la section avec un bouton "See All" pour afficher la carte en plein écran.
+    StreamBuilder<List<Commercant>>(
+    stream: Provider.of<CommercantController>(context, listen: false).chargerTousLesCommercants(),
+    builder: (context, snapshot) {
+    if (snapshot.hasData) {
+    final List<Commercant> commercants = snapshot.data!;
+    return FutureBuilder<List<Marker>>(
+    future: _getCommercantMarkers(commercants),
+    builder: (context, markerSnapshot) {
+    if (markerSnapshot.hasData) {
+    final List<Marker> commercantMarkers = markerSnapshot.data!;
+    List<Marker> allMarkers = [...commercantMarkers];
+
+    // Ajout du marqueur de l'utilisateur SI la localisation a été obtenue
+    if (_userLocation != null) {
+    allMarkers.add(
+    Marker(
+    width: 120.0,
+    height: 50.0,
+    point: _userLocation!,
+    child: Column(
+    children: [
+    Container(
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+    decoration: BoxDecoration(
+    color: Colors.blue.withOpacity(0.8),
+    borderRadius: BorderRadius.circular(8),
+    border: Border.all(color: Colors.grey[300]!),
+    ),
+    child: const Text(
+    "Vous êtes ici",
+    style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white),
+    textAlign: TextAlign.center,
+    ),
+    ),
+    const Icon(Icons.location_on, color: Colors.blue, size: 30),
+    ],
+    ),
+    ),
+    );
+    }
+
+    return _buildSectionTitle('Close To You', showAction: true, onActionPressed: () {
+    Navigator.push(
+    context,
+    MaterialPageRoute(
+    builder: (context) => FullMapPage(
+    initialPosition: _mapController.center,
+    initialZoom: _mapController.zoom,
+    markers: allMarkers,
+    ),
+    ),
+    );
+    });
+    } else {
+    return _buildSectionTitle('Close To You', showAction:true, onActionPressed: () {});
+    }
+    },
+    );
+    } else {
+      return _buildSectionTitle('Close To You', showAction: true, onActionPressed: () {});
+    }
+    },
+    ),
+      const SizedBox(height: 12),
+      // Container pour afficher la carte des commerçants à proximité.
+      SizedBox(
+        height: 200,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: StreamBuilder<List<Commercant>>(
             stream: Provider.of<CommercantController>(context, listen: false).chargerTousLesCommercants(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -403,120 +475,125 @@ class _HomePageState extends State<HomePage> {
                   future: _getCommercantMarkers(commercants),
                   builder: (context, markerSnapshot) {
                     if (markerSnapshot.hasData) {
-                      final List<Marker> markers = markerSnapshot.data!;
-                      return _buildSectionTitle('Close To You', showAction: true, onActionPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => FullMapPage(
-                              initialPosition: _mapController.center,
-                              initialZoom: _mapController.zoom,
-                              markers: markers,
+                      final List<Marker> commercantMarkers = markerSnapshot.data!;
+                      List<Marker> allMarkers = [...commercantMarkers];
+
+                      // Ajout du marqueur de l'utilisateur SI la localisation a été obtenue
+                      if (_userLocation != null) {
+                        allMarkers.add(
+                          Marker(
+                            width: 120.0,
+                            height: 50.0,
+                            point: _userLocation!,
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue.withOpacity(0.8),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: Colors.grey[300]!),
+                                  ),
+                                  child: const Text(
+                                    "Vous êtes ici",
+                                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                const Icon(Icons.location_on, color: Colors.blue, size: 30),
+                              ],
                             ),
                           ),
                         );
-                      });
+                      }
+
+                      return FlutterMap(
+                        mapController: _mapController,
+                        options: MapOptions(
+                          center: _userLocation ?? _mapPosition, // Centre sur la position de l'utilisateur si disponible
+                          zoom: _mapZoom,
+                        ),
+                        children: [
+                          TileLayer(
+                            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            userAgentPackageName: 'com.example.app',
+                          ),
+                          MarkerLayer(
+                            markers: allMarkers,
+                          ),
+                        ],
+                      );
                     } else {
-                      return _buildSectionTitle('Close To You', showAction: true, onActionPressed: () {});
+                      return const Center(child: CircularProgressIndicator(color: HomePage.primaryColor));
                     }
                   },
                 );
               } else {
-                return _buildSectionTitle('Close To You', showAction: true, onActionPressed: () {});
+                return const Center(child: Text('Aucun commerçant trouvé'));
               }
             },
           ),
-          const SizedBox(height: 12),
-          // Container pour afficher la carte des commerçants à proximité.
-          SizedBox(
-            height: 200,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: StreamBuilder<List<Commercant>>(
-                stream: Provider.of<CommercantController>(context, listen: false).chargerTousLesCommercants(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    final List<Commercant> commercants = snapshot.data!;
-                    return FutureBuilder<List<Marker>>(
-                      future: _getCommercantMarkers(commercants),
-                      builder: (context, markerSnapshot) {
-                        if (markerSnapshot.hasData) {
-                          return FlutterMap(
-                            mapController: _mapController,
-                            options: MapOptions(
-                              center: _mapPosition,
-                              zoom: _mapZoom,
-                            ),
-                            children: [
-                              TileLayer(
-                                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                userAgentPackageName: 'com.example.app',
-                              ),
-                              MarkerLayer(
-                                markers: markerSnapshot.data!,
-                              ),
-                            ],
-                          );
-                        } else {
-                          return const Center(child: CircularProgressIndicator(color: HomePage.primaryColor));
-                        }
-                      },
-                    );
-                  } else {
-                    return const Center(child: Text('Aucun commerçant trouvé'));
-                  }
-                },
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
+    ],
+    ),
     );
   }
 
   // Widget pour construire la section "Available Now" affichant les paniers disponibles.
   Widget _buildAvailableNowSection() {
     return Padding(
-        padding: const EdgeInsets.all(16),
-    child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    // Titre de la section avec un bouton "See All" pour recharger les paniers.
-    _buildSectionTitle('Available Now', showAction: true, onActionPressed: () {
-    Provider.of<PanierController>(context, listen: false).loadPaniersDisponibles();}),
-      const SizedBox(height: 12),
-      // Consommateur du PanierController pour afficher la liste des paniers disponibles.
-      Consumer<PanierController>(
-        builder: (context, panierController, _) {
-          // Affiche un message d'erreur si le chargement des données a échoué.
-          if (panierController.error != null) {
-            return Text('Error loading data: ${panierController.error}', style: const TextStyle(color: Colors.red));
-          }
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Titre de la section avec un bouton "See All" pour recharger les paniers.
+          _buildSectionTitle('Available Now', showAction: true, onActionPressed: () {
+            Provider.of<PanierController>(context, listen: false).loadPaniersDisponibles();
+          }),
+          const SizedBox(height: 12),
+          // Consommateur du PanierController pour afficher la liste des paniers disponibles.
+          Consumer<PanierController>(
+            builder: (context, panierController, _) {
+              // Affiche un message d'erreur si le chargement des données a échoué.
+              if (panierController.error != null) {
+                return Text('Error loading data: ${panierController.error}', style: const TextStyle(color: Colors.red));
+              }
 
-          final paniersAvecNom = panierController.paniersDisponiblesAvecNom;
-          // Affiche un indicateur de chargement si la liste des paniers est vide et qu'il n'y a pas d'erreur.
-          if (paniersAvecNom.isEmpty) {
-            return const Center(child: CircularProgressIndicator(color: HomePage.primaryColor));
-          }
+              final paniersAvecNom = panierController.paniersDisponiblesAvecNom;
+              // Affiche un message si aucun panier n'est disponible et que le chargement est terminé.
+              if (paniersAvecNom.isEmpty && !panierController.loading) {
+                return const Center(
+                  child: Text(
+                    'Aucun panier n\'est disponible pour le moment.',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                );
+              }
 
-          // Affiche une liste horizontale des paniers disponibles.
-          return SizedBox(
-            height: 190,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: paniersAvecNom.length,
-              itemBuilder: (context, index) {
-                final data = paniersAvecNom[index];
-                final PanierModel panier = data['panier'];
-                final String nomCommercant = data['nomCommercant'];
-                return _buildPanierItem(panier, nomCommercant);
-              },
-            ),
-          );
-        },
+              // Affiche un indicateur de chargement pendant le chargement des données.
+              if (panierController.loading && paniersAvecNom.isEmpty) {
+                return const Center(child: CircularProgressIndicator(color: HomePage.primaryColor));
+              }
+
+              // Affiche une liste horizontale des paniers disponibles.
+              return SizedBox(
+                height: 190,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: paniersAvecNom.length,
+                  itemBuilder: (context, index) {
+                    final data = paniersAvecNom[index];
+                    final PanierModel panier = data['panier'];
+                    final String nomCommercant = data['nomCommercant'];
+                    return _buildPanierItem(panier, nomCommercant);
+                  },
+                ),
+              );
+            },
+          ),
+        ],
       ),
-    ],
-    ),
     );
   }
 
