@@ -10,8 +10,8 @@ import 'Restaurant.dart';
 import 'Market.dart';
 import '../../Controllers/customer/PanierController.dart';
 import '../../services/PanierService.dart';
-import '../../Models/PanierModel.dart';
-import '../../Models/modelCommercant.dart';
+import '../../Models/panier_modele.dart';
+import '../../Models/commerce_modele.dart';
 import '../../services/serviceCommercant.dart';
 import '../../Controllers/controlCommercant.dart';
 import 'package:geocoding/geocoding.dart';
@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   // Fonction asynchrone pour obtenir les marqueurs des commerçants pour la carte.
-  Future<List<Marker>> _getCommercantMarkers(List<Commercant> commercants) async {
+  Future<List<Marker>> _getCommercantMarkers(List<Commerce> commercants) async {
     print('_getCommercantMarkers appelé avec ${commercants.length} commerçants');
     List<Marker> markers = [];
 
@@ -397,11 +397,11 @@ class _HomePageState extends State<HomePage> {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
     // Titre de la section avec un bouton "See All" pour afficher la carte en plein écran.
-    StreamBuilder<List<Commercant>>(
+    StreamBuilder<List<Commerce>>(
     stream: Provider.of<CommercantController>(context, listen: false).chargerTousLesCommercants(),
     builder: (context, snapshot) {
     if (snapshot.hasData) {
-    final List<Commercant> commercants = snapshot.data!;
+    final List<Commerce> commercants = snapshot.data!;
     return FutureBuilder<List<Marker>>(
     future: _getCommercantMarkers(commercants),
     builder: (context, markerSnapshot) {
@@ -466,11 +466,11 @@ class _HomePageState extends State<HomePage> {
         height: 200,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: StreamBuilder<List<Commercant>>(
+          child: StreamBuilder<List<Commerce>>(
             stream: Provider.of<CommercantController>(context, listen: false).chargerTousLesCommercants(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                final List<Commercant> commercants = snapshot.data!;
+                final List<Commerce> commercants = snapshot.data!;
                 return FutureBuilder<List<Marker>>(
                   future: _getCommercantMarkers(commercants),
                   builder: (context, markerSnapshot) {
@@ -584,7 +584,7 @@ class _HomePageState extends State<HomePage> {
                   itemCount: paniersAvecNom.length,
                   itemBuilder: (context, index) {
                     final data = paniersAvecNom[index];
-                    final PanierModel panier = data['panier'];
+                    final Panier panier = data['panier'];
                     final String nomCommercant = data['nomCommercant'];
                     return _buildPanierItem(panier, nomCommercant);
                   },
@@ -598,7 +598,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   // Widget pour construire un item de panier affiché dans la liste horizontale.
-  Widget _buildPanierItem(PanierModel panier, String nomCommerce) {
+  Widget _buildPanierItem(Panier panier, String nomCommerce) {
     return Container(
       width: 209,
       height: 190,

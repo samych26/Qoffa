@@ -1,23 +1,24 @@
 import '../services/serviceCommercant.dart';
-import '../Models/modelCommercant.dart';
+import '../Models/commerce_modele.dart';
+
+
 
 class CommercantController {
   final FirestoreService _service = FirestoreService();
 
-  Stream<List<Commercant>> chargerCommercantsParCategorie(String categorie) {
+  Stream<List<Commerce>> chargerCommercantsParCategorie(String categorie) {
     print('CommercantController: chargerCommercantsParCategorie appelé pour la catégorie: $categorie');
-    return _service.getCommercantsParCategorie(categorie).map((commercants) {
-      print('CommercantController: Commerçants récupérés du service pour $categorie: ${commercants.length}');
-      return commercants;
+    return _service.getCommercantsParCategorie(categorie).map((commerces) {
+      print('CommercantController: Commerces récupérés du service pour $categorie: ${commerces.length}');
+      return commerces;
     });
   }
 
-  Stream<List<Commercant>> chargerTousLesCommercants() {
+  Stream<List<Commerce>> chargerTousLesCommercants() {
     print('CommercantController: chargerTousLesCommercants appelé');
-    return _service.getAllCommercants().map((commercants) {
-      print('CommercantController: Commerçants récupérés du service (tous): ${commercants.length}');
-
-      return commercants;
+    return _service.getAllCommercants().map((commerces) {
+      print('CommercantController: Commerces récupérés du service (tous): ${commerces.length}');
+      return commerces;
     });
   }
 

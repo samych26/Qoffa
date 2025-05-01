@@ -2,11 +2,14 @@
 
 import 'package:flutter/material.dart';
 import '../../services/PanierService.dart';
-import '../../Models/PanierModel.dart';
+import '../../Models/panier_modele.dart'; // Assure-toi que le nom du fichier est correct
 import '../../services/serviceCommercant.dart';
-import '../../Models/modelCommercant.dart';
+import '../../Models/commerce_modele.dart'; // Importe le nouveau modèle Commerce
 import 'package:collection/collection.dart';
 
+
+
+// lib/Controllers/customer/PanierController.dart
 class PanierController extends ChangeNotifier {
   final PanierService _panierService;
   final FirestoreService _commercantService = FirestoreService();
@@ -27,18 +30,21 @@ class PanierController extends ChangeNotifier {
     _error = null;
     notifyListeners();
     try {
-      final paniers = await _panierService.getPaniersDisponiblesAujourdhui();
+      final List<Panier> paniers = await _panierService.getPaniersDisponiblesAujourdhui();
       _paniersDisponiblesAvecNom = [];
+
       for (final panier in paniers) {
-        // Accéder à l'ID du document à partir de la DocumentReference
-        final commercantId = panier.idCommercantRef.id;
-        print('ID du commerçant associé au panier ${panier.id}: $commercantId');
-        final commercant = await _getCommercant(commercantId);
+        final String commercantId = panier.idCommercantRef.id;
+        print('ID du commerçant associé au panier ${panier.id}: $commercantId'); // Utilise panier.id
+
+        final Commerce? commercant = await _getCommercant(commercantId);
+
         _paniersDisponiblesAvecNom.add({
           'panier': panier,
           'nomCommercant': commercant?.nomCommerce ?? 'Nom inconnu',
         });
       }
+
       notifyListeners();
     } catch (e) {
       _error = 'Erreur lors du chargement des paniers d\'aujourd\'hui: $e';
@@ -50,13 +56,14 @@ class PanierController extends ChangeNotifier {
     }
   }
 
-  Future<Commercant?> _getCommercant(String? commercantId) async {
-    if (commercantId == null) return null;
+  Future<Commerce?> _getCommercant(String commercantId) async {
     try {
       final commercantsStream = _commercantService.getAllCommercants();
-      final commercants = await commercantsStream.first;
+      final List<Commerce> commercants = await commercantsStream.first;
+
       print('Liste des commerçants récupérée dans _getCommercant: $commercants');
-      final commercantTrouve = commercants.firstWhereOrNull((c) => c.id == commercantId);
+
+      final Commerce? commercantTrouve = commercants.firstWhereOrNull((c) => c.idUtilisateur == commercantId);
       return commercantTrouve;
     } catch (e) {
       print('Erreur lors de la récupération du commerçant: $e');

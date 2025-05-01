@@ -1,27 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../Models/modelCommercant.dart';
+import '../Models/commerce_modele.dart';
+
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   // Méthode pour récupérer les commerces par catégorie
-  Stream<List<Commercant>> getCommercantsParCategorie(String categorie) {
+  Stream<List<Commerce>> getCommercantsParCategorie(String categorie) {
     return _db
         .collection('Commercant')
         .where('categorie', isEqualTo: categorie)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((doc) {
-        return Commercant.fromFirestore(doc);
+        return Commerce.fromFirestore(doc);
       }).toList();
     });
   }
 
-  // Méthode pour récupérer tous les commerçants
-  Stream<List<Commercant>> getAllCommercants() {
+
+  Stream<List<Commerce>> getAllCommercants() {
     return _db.collection('Commercant').snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
-        return Commercant.fromFirestore(doc);
+        return Commerce.fromFirestore(doc);
       }).toList();
     });
   }
