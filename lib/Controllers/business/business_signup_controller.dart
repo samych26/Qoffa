@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import '../../Models/commerce_modele.dart';
 import '../../views/business/account_pending_view.dart';
 
 class BusinessSignUpController extends ChangeNotifier {
@@ -94,7 +95,6 @@ class BusinessSignUpController extends ChangeNotifier {
       // 1. Créer l'utilisateur
       final userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
-
       final userId = userCredential.user!.uid;
 
       // 2. Vérifier que le fichier existe
@@ -110,67 +110,57 @@ class BusinessSignUpController extends ChangeNotifier {
       final storageRef = FirebaseStorage.instance
           .ref()
           .child('business_docs/$userId/${_selectedFile!.name}');
+      final metadata = SettableMetadata(contentType: 'application/pdf');
 
-      final metadata = SettableMetadata(
-        contentType: 'application/pdf',
+      final snapshot = await storageRef.putFile(file, metadata).whenComplete(() {});
+      if (snapshot.state != TaskState.success) {
+        globalMessage = "Échec de l'upload du fichier";
+        isLoading = false;
+        notifyListeners();
+        return;
+      }
+
+      final fileUrl = await storageRef.getDownloadURL();
+
+      // 4. Créer un objet Commerce
+      final commercant = Commerce(
+        idUtilisateur: userId,
+        nom: lastName,
+        prenom: firstName,
+        email: email,
+        motDePasse: password,
+        photoDeProfile: '',
+        typeUtilisateur: 'Commerçant',
+        nomCommerce: businessName,
+        adresseCommerce: address,
+        numTelCommerce: phoneNumber,
+        horaires: '',
+        description: '',
+        numRegistreCommerce: registrationNumber,
+        registreCommerce: fileUrl,
+        etatCompteCommercant: 'en attente',
+        categorie: category,
+        note: 0.0,
+        nbNotes: 0,
       );
 
-      // 4. Exécuter l'upload avec gestion d'erreur
-      try {
-        final uploadTask = storageRef.putFile(file, metadata);
-        final snapshot = await uploadTask.whenComplete(() {});
+      // 5. Sauvegarder dans Firestore
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        final userRef = FirebaseFirestore.instance.collection('Utilisateur').doc(userId);
+        final businessRef = FirebaseFirestore.instance.collection('Commercant').doc(userId);
 
-        if (snapshot.state == TaskState.success) {
-          final fileUrl = await storageRef.getDownloadURL();
+        transaction.set(userRef, commercant.toMapUtilisateur());
+        transaction.set(businessRef, commercant.toMapCommercant());
+      });
 
-          // 5. Sauvegarder les données dans Firestore
-          await FirebaseFirestore.instance.runTransaction((transaction) async {
-            final userRef = FirebaseFirestore.instance.collection('Utilisateur').doc(userId);
-            final businessRef = FirebaseFirestore.instance.collection('Commercant').doc(userId);
-
-            transaction.set(userRef, {
-              'nom': lastName,
-              'prenom': firstName,
-              'email': email,
-              'typeUtilisateur': 'Commerçant',
-              'photoDeProfile': '',
-              'createdAt': FieldValue.serverTimestamp(),
-            });
-
-            transaction.set(businessRef, {
-              'idCommerce': userId,
-              'nomCommerce': businessName,
-              'adresseCommerce': address,
-              'numTelCommerce': phoneNumber,
-              'horaires': '',
-              'description': '',
-              'cptVentes': 0,
-              'numRegistreCommerçant': registrationNumber,
-              'registreCommerce': fileUrl,
-              'etatCompteCommercant': 'en attente',
-              'categorie': category,
-              'createdAt': FieldValue.serverTimestamp(),
-            });
-          });
-
-          globalMessage = "🎉 Inscription réussie ! Votre compte est en attente de validation.";
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => AccountPendingView()),
-          );
-        } else {
-          globalMessage = "Échec de l'upload du fichier";
-        }
-      } on FirebaseException catch (e) {
-        if (e.code == 'canceled') {
-          globalMessage = "Upload annulé";
-        } else {
-          globalMessage = "Erreur Firebase Storage: ${e.code} - ${e.message}";
-        }
-      }
+      globalMessage = "🎉 Inscription réussie ! Votre compte est en attente de validation.";
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => AccountPendingView()),
+      );
     } on FirebaseAuthException catch (e) {
       globalMessage = "Erreur d'authentification: ${e.message}";
     } on FirebaseException catch (e) {
-      globalMessage = "Erreur Firestore: ${e.code} - ${e.message}";
+      globalMessage = "Erreur Firebase: ${e.code} - ${e.message}";
     } catch (e) {
       globalMessage = "Erreur inattendue: ${e.toString()}";
     } finally {

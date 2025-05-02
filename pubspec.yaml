@@ -20,6 +20,7 @@ dependencies:
   firebase_auth: ^4.17.4
   provider: ^6.1.1
   firebase_storage: ^11.5.0
+  curved_navigation_bar: ^1.0.6
 
 dev_dependencies:
   flutter_test:

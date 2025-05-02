@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'customer/signup_customer.dart';
 import 'business/signup_business.dart';
+import 'business/BusinessHomeView.dart';
 
 
 class UserTypeSelectionPage extends StatelessWidget {
