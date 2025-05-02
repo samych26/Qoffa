@@ -294,100 +294,81 @@ class _HomePageState extends State<HomePage> {
 
   // Widget pour construire la section des catégories.
   Widget _buildCategoriesSection(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Categories',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  print('See All clicked!');
-                },
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  minimumSize: const Size(50, 30),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                child: const Text(
-                  'See All',
-                  style: TextStyle(
-                    color: HomePage.primaryColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Categories',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildCategoryItemWithAsset(context, 'assets/icons/pastry.png', 'Pastry'),
-              _buildCategoryItemWithAsset(context, 'assets/icons/bakery.png', 'Bakery'),
-              _buildCategoryItemWithAsset(context, 'assets/icons/restaurant.png', 'Restaurant'),
-              _buildCategoryItemWithAsset(context, 'assets/icons/market.png', 'Market'),
-            ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildCategoryIconWithImage(context, 'assets/images/pastry.png', 'Pastry'),
+            _buildCategoryIconWithImage(context, 'assets/images/bakery.png', 'Bakery', isSelected: true),
+            _buildCategoryIconWithImage(context, 'assets/images/restaurant.png', 'Restaurant'),
+            _buildCategoryIconWithImage(context, 'assets/images/market.png', 'Market'),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCategoryIconWithImage(BuildContext context, String assetPath, String label, {bool isSelected = false}) {
+    return GestureDetector(
+      onTap: () {
+        if (label == 'Pastry') {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => PastryPage()));
+        } else if (label == 'Restaurant') {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => RestaurantPage()));
+        } else if (label == 'Market') {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => MarketPage()));
+        }
+      },
+      child: Column(
+        children: [
+          Container(
+            width: 82,
+            height: 71,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.25),
+                  blurRadius: 6,
+                  offset: const Offset(2, 4),
+                ),
+                BoxShadow(
+                  color: Colors.white.withOpacity(0.3),
+                  spreadRadius: -4,
+                  blurRadius: 10,
+                  offset: const Offset(-2, -2),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                assetPath,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: const TextStyle(color: Colors.white),
           ),
         ],
       ),
     );
   }
 
-  // Widget pour construire un item de catégorie avec une icône (asset) et un label.
-  Widget _buildCategoryItemWithAsset(BuildContext context, String assetPath, String label) {
-    return GestureDetector(
-      onTap: () {
-        // Navigue vers la page de catégorie correspondante en fonction du label.
-        if (label == 'Pastry') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const PastryPage()),
-          );
-        } else if (label == 'Bakery') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const BakeryPage()),
-          );
-        } else if (label == 'Restaurant') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const RestaurantPage()),
-          );
-        } else if (label == 'Market') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const MarketPage()),
-          );
-        }
-      },
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 28,
-            backgroundColor: HomePage.primaryColor.withOpacity(0.2),
-            child: Image.asset(
-              assetPath,
-              width: 30,
-              height: 30,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(label, style: const TextStyle(color: Colors.white)),
-        ],
-      ),
-    );
-  }
 
   // Widget pour construire la section "Close To You" affichant la carte des commerçants à proximité.
   Widget _buildCloseToYouSection(BuildContext context) {

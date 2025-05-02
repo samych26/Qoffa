@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
+// import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
 import '../login_page.dart';
 
@@ -46,7 +46,7 @@ class _BusinessSignUpPageState extends State<BusinessSignUpPage> {
                 ),
                 const SizedBox(height: 24),
                 if (currentPage == 1) _buildFirstPage(),
-                if (currentPage == 2) _buildSecondPage(),
+                // if (currentPage == 2) _buildSecondPage(),
               ],
             ),
           )
@@ -111,7 +111,7 @@ class _BusinessSignUpPageState extends State<BusinessSignUpPage> {
     );
   }
 
-  Widget _buildSecondPage() {
+  /*Widget _buildSecondPage() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -185,7 +185,7 @@ class _BusinessSignUpPageState extends State<BusinessSignUpPage> {
         _buildTermsText(),
       ],
     );
-  }
+  }*/
 
   Widget _buildLabel(String text) {
     return Padding(

@@ -6,7 +6,7 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<UserModel?> loginWithEmail(String email, String password) async {
+  Future<UtilisateurModele?> loginWithEmail(String email, String password) async {
     try {
       // Authentification Firebase
       UserCredential userCred = await _auth.signInWithEmailAndPassword(
@@ -21,7 +21,7 @@ class AuthService {
 
       if (!doc.exists) throw Exception("Utilisateur introuvable.");
 
-      return UserModel.fromMap(uid, doc.data()!);
+      return UtilisateurModele.fromMap(uid, doc.data()!);
     } catch (e) {
       throw Exception("Erreur de connexion : ${e.toString()}");
     }

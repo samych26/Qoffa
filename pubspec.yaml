@@ -35,15 +35,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
-    - assets/icons/pastry.png
-    - assets/icons/bakery.png
-    - assets/icons/restaurant.png
-    - assets/icons/market.png
-    - assets/icons/pastryJaune.png
-    - assets/icons/bakeryJaune.png
-    - assets/icons/marketJaune.png
-    - assets/icons/restaurantJaune.png
-    - assets/icons/home.png
+
 
 
   fonts:
