@@ -1,18 +1,30 @@
-class UserModel {
-  final String id;
+class UtilisateurModele {
+  final String idUtilisateur;
+  final String nom;
+  final String prenom;
   final String email;
-  final String typeUtilisateur; // client ou commerçant
+  final String motDePasse;
+  final String photoDeProfile;
+  final String typeUtilisateur;
 
-  UserModel({
-    required this.id,
+  UtilisateurModele({
+    required this.idUtilisateur,
+    required this.nom,
+    required this.prenom,
     required this.email,
+    required this.motDePasse,
+    required this.photoDeProfile,
     required this.typeUtilisateur,
   });
 
-  factory UserModel.fromMap(String id, Map<String, dynamic> data) {
-    return UserModel(
-      id: id,
+  factory UtilisateurModele.fromMap(String id, Map<String, dynamic> data) {
+    return UtilisateurModele(
+      idUtilisateur: id,
+      nom: data['nom'] ?? '',
+      prenom: data['prenom'] ?? '',
       email: data['email'] ?? '',
+      motDePasse: data['motDePasse'] ?? '',
+      photoDeProfile: data['photoDeProfil'] ?? '',
       typeUtilisateur: data['typeUtilisateur'] ?? '',
     );
   }
