@@ -33,6 +33,7 @@ class Commerce extends UtilisateurModele {
     required this.nbNotes,
     required this.categorie,
   }) : super(
+<<<<<<< HEAD
           idUtilisateur: idUtilisateur,
           nom: nom,
           prenom: prenom,
@@ -41,6 +42,46 @@ class Commerce extends UtilisateurModele {
           photoDeProfile: photoDeProfile,
           typeUtilisateur: typeUtilisateur,
         );
+=======
+    idUtilisateur: idUtilisateur,
+    nom: nom,
+    prenom: prenom,
+    email: email,
+    motDePasse: motDePasse,
+    photoDeProfile: photoDeProfile,
+    typeUtilisateur: typeUtilisateur,
+  );
+
+  // Pour la collection Utilisateur
+  Map<String, dynamic> toMapUtilisateur() {
+    return {
+      'nom': nom,
+      'prenom': prenom,
+      'email': email,
+      'motDePasse': motDePasse,
+      'photoDeProfile': photoDeProfile,
+      'typeUtilisateur': typeUtilisateur,
+    };
+  }
+
+  // Pour la collection Commercant
+  Map<String, dynamic> toMapCommercant() {
+    return {
+      'idCommerce': idUtilisateur,
+      'nomCommerce': nomCommerce,
+      'adresseCommerce': adresseCommerce,
+      'numTelCommerce': numTelCommerce,
+      'horaires': horaires,
+      'description': description,
+      'numRegistreCommerce': numRegistreCommerce,
+      'registreCommerce': registreCommerce,
+      'etatCompteCommercant': etatCompteCommercant,
+      'categorie': categorie,
+      'note': note,
+      'nbNotes': nbNotes,
+    };
+  }
+>>>>>>> 85e60e86762bcf4d654f7f22ac1aa28f43900f60
 
   factory Commerce.fromMap(String id, Map<String, dynamic> data) {
     return Commerce(

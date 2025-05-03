@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../Models/client_model.dart';
 
 class SignUpController extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -101,29 +102,24 @@ class SignUpController extends ChangeNotifier {
         return;
       }
 
-      await _firestore.collection('Utilisateur').doc(uid).set({
-        'nom': nom,
-        'prenom': prenom,
-        'email': email,
-        'motDePasse': password,
-        'typeUtilisateur': 'Client',
-        'photoDeProfile': '',
-      });
+      final client = Client(
+        idUtilisateur: uid,
+        nom: nom,
+        prenom: prenom,
+        email: email,
+        motDePasse: password,
+        photoDeProfile: '',
+        typeUtilisateur: 'Client',
+        adresseClient: '',
+        numTelClient: phone,
+      );
 
-      await _firestore.collection('Client').doc(uid).set({
-        'idClient': uid,
-        'adresseClient': '',
-        'numTelClient': phone,
-        'cptCommandeEnCours': 0,
-        'cptAnnulation': 0,
-        'cptAchats': 0,
-        'etatCompteClient': 'actif',
-      });
+      await _firestore.collection('Utilisateur').doc(uid).set(client.toMapUtilisateur());
+      await _firestore.collection('Client').doc(uid).set(client.toMapClient());
 
       successMessage = 'Compte créé avec succès !';
       notifyListeners();
 
-      // Efface le message après 3 secondes
       Future.delayed(const Duration(seconds: 3), () {
         successMessage = null;
         notifyListeners();
