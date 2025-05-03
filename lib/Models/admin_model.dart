@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+
+=======
+>>>>>>> 85e60e86762bcf4d654f7f22ac1aa28f43900f60
 import 'user_modele.dart';
 
 class Admin extends UtilisateurModele {
@@ -8,7 +12,10 @@ class Admin extends UtilisateurModele {
     required String email,
     required String motDePasse,
     required String photoDeProfile,
+<<<<<<< HEAD
+=======
     required typeUtilisateur,
+>>>>>>> 85e60e86762bcf4d654f7f22ac1aa28f43900f60
   }) : super(
           idUtilisateur: idUtilisateur,
           nom: nom,
@@ -18,6 +25,8 @@ class Admin extends UtilisateurModele {
           photoDeProfile: photoDeProfile,
           typeUtilisateur: 'admin',
         );
+<<<<<<< HEAD
+=======
 
 
 
@@ -34,4 +43,5 @@ class Admin extends UtilisateurModele {
     );
   }
   
+>>>>>>> 85e60e86762bcf4d654f7f22ac1aa28f43900f60
 }

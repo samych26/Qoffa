@@ -19,8 +19,12 @@ dependencies:
   dropdown_button2: ^2.3.9
   firebase_auth: ^4.17.4
   provider: ^6.1.1
+<<<<<<< HEAD
+  url_launcher: ^6.3.1
+=======
   firebase_storage: ^11.5.0
   curved_navigation_bar: ^1.0.6
+>>>>>>> 85e60e86762bcf4d654f7f22ac1aa28f43900f60
 
 dev_dependencies:
   flutter_test:
