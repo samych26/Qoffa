@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'user_modele.dart';
 
 class Commerce extends UtilisateurModele {
@@ -71,7 +73,50 @@ class Commerce extends UtilisateurModele {
       'nbNotes': nbNotes,
     };
   }
-
+  factory Commerce.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc) {
+    final data = doc.data()!;
+    return Commerce(
+      idUtilisateur: doc.id,
+      nom: data['nom'] ?? '',
+      prenom: data['prenom'] ?? '',
+      email: data['email'] ?? '',
+      motDePasse: data['motDePasse'] ?? '',
+      photoDeProfile: data['photoDeProfile'] ?? '',
+      typeUtilisateur: data['typeUtilisateur'] ?? '',
+      nomCommerce: data['nomCommerce'] ?? 'Nom inconnu',
+      adresseCommerce: data['adresseCommerce'] ?? 'Adresse inconnue',
+      numTelCommerce: data['numTelCommerce'] ?? 'Numéro non disponible',
+      horaires: data['horaires'] ?? 'Horaire non disponible',
+      description: data['description'] ?? 'Description non disponible',
+      numRegistreCommerce: data['numRegistreCommerce'],
+      registreCommerce: data['registreCommerce'],
+      etatCompteCommercant: data['etatCompteCommercant'] ?? 'État non défini',
+      note: (data['note'] ?? 0.0).toDouble(),
+      nbNotes: data['nbNotes'] ?? 0,
+      categorie: data['categorie'] ?? 'Catégorie non définie',
+    );
+  }
+  Map<String, dynamic> toFirestore() {
+    return {
+      'nom': nom,
+      'prenom': prenom,
+      'email': email,
+      'motDePasse': motDePasse,
+      'photoDeProfile': photoDeProfile,
+      'typeUtilisateur': typeUtilisateur,
+      'nomCommerce': nomCommerce,
+      'adresseCommerce': adresseCommerce,
+      'numTelCommerce': numTelCommerce,
+      'horaires': horaires,
+      'description': description,
+      'numRegistreCommerce': numRegistreCommerce,
+      'registreCommerce': registreCommerce,
+      'etatCompteCommercant': etatCompteCommercant,
+      'note': note,
+      'nbNotes': nbNotes,
+      'categorie': categorie,
+    };
+  }
   factory Commerce.fromMap(String id, Map<String, dynamic> data) {
     return Commerce(
       idUtilisateur: id,
@@ -94,4 +139,5 @@ class Commerce extends UtilisateurModele {
       categorie: data['categorie'] ?? '',
     );
   }
+
 }

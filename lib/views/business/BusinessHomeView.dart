@@ -3,6 +3,10 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class BusinessHomeView extends StatefulWidget {
+  final String idUtilisateur;
+
+  const BusinessHomeView({Key? key, required this.idUtilisateur}) : super(key: key);
+
   @override
   _BusinessHomeViewState createState() => _BusinessHomeViewState();
 }

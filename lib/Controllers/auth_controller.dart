@@ -1,16 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../models/user_modele.dart';
+import '../views/customer/HomePage.dart';
+import '../views/business/BusinessHomeView.dart';
 
 class AuthController extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // 🔴 Gestion des erreurs
   String? emailError;
   String? passwordError;
   String? generalError;
 
-  // 🧹 Réinitialiser les erreurs
   void clearErrors() {
     emailError = null;
     passwordError = null;
@@ -18,11 +19,9 @@ class AuthController extends ChangeNotifier {
     notifyListeners();
   }
 
-  // 🔐 Connexion avec validation et redirection selon le type
   Future<void> signInWithEmail(String email, String password, BuildContext context) async {
     clearErrors();
 
-    // ✅ Validation locale simple
     if (email.isEmpty) {
       emailError = "L'email est requis";
     } else if (!email.contains('@')) {
@@ -60,15 +59,24 @@ class AuthController extends ChangeNotifier {
         return;
       }
 
-      final data = doc.data()!;
-      final type = data['typeUtilisateur'];
+      final utilisateur = UtilisateurModele.fromMap(doc.id, doc.data()!);
 
-      switch (type) {
+      switch (utilisateur.typeUtilisateur) {
         case "Client":
-          Navigator.pushReplacementNamed(context, "/client_home");
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(idUtilisateur: userId),
+            ),
+          );
           break;
         case "Commerçant":
-          Navigator.pushReplacementNamed(context, "/business_home");
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BusinessHomeView(idUtilisateur: userId),
+            ),
+          );
           break;
         case "Administrateur":
           Navigator.pushReplacementNamed(context, "/admin_home");
@@ -99,7 +107,6 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-  // 📝 Création de compte
   Future<User?> signUp(String email, String password) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
@@ -113,15 +120,11 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-  // 🔓 Déconnexion
   Future<void> signOut() async {
     await _auth.signOut();
     notifyListeners();
   }
 
-  // 🔍 Utilisateur actuel
   User? get currentUser => _auth.currentUser;
-
-  // 📡 Flux d'état d'authentification
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 }

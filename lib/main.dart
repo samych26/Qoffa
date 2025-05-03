@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart'; // Firebase core
+import 'views/business/BusinessHomeView.dart';
+import 'views/customer/HomePage.dart';
 import 'views/onboarding_view.dart';
 import 'views/login_page.dart';
 import 'package:provider/provider.dart';
 import 'controllers/auth_controller.dart';
 import 'controllers/customer/signup_controller.dart';
 import 'controllers/business/business_signup_controller.dart';
-
-
+import 'firebase_options.dart';
+import 'services/PanierService.dart';
+import 'Controllers/controlCommercant.dart';
+import 'Controllers/customer/PanierController.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,13 +24,17 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AuthController()),
         ChangeNotifierProvider(create: (_) => SignUpController()),
         ChangeNotifierProvider(create: (_) => BusinessSignUpController()),
-
+        ChangeNotifierProvider<PanierController>(
+          create: (context) => PanierController(PanierService()),
+        ),
+        Provider<CommercantController>(
+          create: (context) => CommercantController(),
+        ),
       ],
       child: QoffaApp(),
     ),
   );
 }
-
 
 class QoffaApp extends StatelessWidget {
   @override
@@ -37,7 +45,16 @@ class QoffaApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Color(0xFFD6EE8F),
       ),
-      home: SplashScreen(),
+      initialRoute: '/',  // Point de départ, la route initiale
+      routes: {
+        '/': (context) => SplashScreen(),
+        '/onboarding': (context) => OnboardingScreen(),
+        '/login': (context) => LoginPage(),
+        // Ajoutez toutes les autres pages de l'application
+        '/HomePage': (context) => HomePage(idUtilisateur: '', ),
+        '/business_home': (context) => BusinessHomeView(idUtilisateur: '',),
+        // '/admin_home': (context) => AdminHomePage(),
+      },
     );
   }
 }
@@ -61,16 +78,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (firstLaunch) {
       prefs.setBool('firstLaunch', false);
-      Navigator.pushReplacement(
+      Navigator.pushReplacementNamed(
         context,
-        MaterialPageRoute(builder: (context) => OnboardingScreen()),
+        '/onboarding',  // Utilisez la route définie pour l'onboarding
       );
     } else {
-      Navigator.pushReplacement(
+      Navigator.pushReplacementNamed(
         context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-
-
+        '/login',  // Utilisez la route définie pour la page de login
       );
     }
   }

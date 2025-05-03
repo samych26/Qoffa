@@ -15,12 +15,16 @@ dependencies:
   flutter_svg: ^2.0.17
   firebase_core: ^2.27.0
   cloud_firestore: ^4.15.8
-  file_picker: ^6.1.1
+  file_picker: ^6.2.0
   dropdown_button2: ^2.3.9
   firebase_auth: ^4.17.4
   provider: ^6.1.1
   firebase_storage: ^11.5.0
   curved_navigation_bar: ^1.0.6
+  flutter_map: 6.1.0
+  latlong2: ^0.9.0
+  geolocator: ^9.0.1
+  geocoding: ^2.1.1
 
 dev_dependencies:
   flutter_test:
