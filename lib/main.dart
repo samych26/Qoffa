@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart'; // Firebase core
 import 'views/business/BusinessHomeView.dart';
 import 'views/customer/HomePage.dart';
+import 'views/customer/favourites_page.dart';
+import 'views/customer/profile_view.dart';
 import 'views/onboarding_view.dart';
 import 'views/login_page.dart';
 import 'package:provider/provider.dart';
@@ -54,6 +56,10 @@ class QoffaApp extends StatelessWidget {
         '/HomePage': (context) => HomePage(idUtilisateur: '', ),
         '/business_home': (context) => BusinessHomeView(idUtilisateur: '',),
         // '/admin_home': (context) => AdminHomePage(),
+        '/home': (context) => const HomePage(idUtilisateur: ''),
+        '/favorites': (context) => FavoriteShopsPage(),
+       // '/cart': (context) => CartPage(),
+        '/profile': (context) => ProfileView(),
       },
     );
   }

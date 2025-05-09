@@ -51,7 +51,7 @@ class _ClientSignUpViewState extends State<ClientSignUpView> {
     );
   }
 
-  // Remplace la méthode _buildStyledField
+
   Widget _buildStyledField({
     required String label,
     required String hint,
@@ -248,45 +248,6 @@ class _ClientSignUpViewState extends State<ClientSignUpView> {
                   ),
                   const SizedBox(height: 12),
 
-                  // 🔘 Google
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton(
-                      onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: const Color(0xFFF3E9B5),
-                        side: const BorderSide(color: Color(0xFFF3E9B5)),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: SvgPicture.asset(
-                                'assets/icons/google.svg',
-                                height: 34.13,
-                                width: 34.13,
-                              ),
-                            ),
-                          ),
-                          const Center(
-                            child: Text(
-                              "Sign up with Google",
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 32),
 
                   Center(
                     child: GestureDetector(

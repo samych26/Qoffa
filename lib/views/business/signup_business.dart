@@ -17,7 +17,7 @@ class BusinessSignUpPage extends StatefulWidget {
 class _BusinessSignUpPageState extends State<BusinessSignUpPage> {
   int currentPage = 1;
   String selectedCategory = 'Restaurant';
-  final List<String> categories = ['Restaurant', 'Supermarket', 'Market', 'Bakery'];
+  final List<String> categories = ['Restaurant', 'Pastry', 'Market', 'Bakery'];
 
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();

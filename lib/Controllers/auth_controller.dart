@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../models/user_modele.dart';
+import '../views/business/account_pending_view.dart';
 import '../views/customer/HomePage.dart';
 import '../views/business/BusinessHomeView.dart';
 
@@ -70,13 +71,35 @@ class AuthController extends ChangeNotifier {
             ),
           );
           break;
-        case "Commerçant":
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BusinessHomeView(idUtilisateur: userId),
-            ),
-          );
+        case "Commerce":
+          final commerceDoc = await FirebaseFirestore.instance
+              .collection("Commerce")
+              .doc(userId)
+              .get();
+
+          if (!commerceDoc.exists) {
+            generalError = "Informations commerçant introuvables.";
+            notifyListeners();
+            return;
+          }
+
+          final etatCompte = commerceDoc.data()?['etatCompteCommercant'];
+          if (etatCompte == "valide") {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BusinessHomeView(idUtilisateur: userId),
+              ),
+            );
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AccountPendingView(),
+              ),
+            );
+
+          }
           break;
         case "Administrateur":
           Navigator.pushReplacementNamed(context, "/admin_home");

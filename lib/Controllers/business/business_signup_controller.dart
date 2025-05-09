@@ -130,7 +130,7 @@ class BusinessSignUpController extends ChangeNotifier {
         email: email,
         motDePasse: password,
         photoDeProfile: '',
-        typeUtilisateur: 'Commerçant',
+        typeUtilisateur: 'Commerce',
         nomCommerce: businessName,
         adresseCommerce: address,
         numTelCommerce: phoneNumber,
@@ -147,7 +147,7 @@ class BusinessSignUpController extends ChangeNotifier {
       // 5. Sauvegarder dans Firestore
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         final userRef = FirebaseFirestore.instance.collection('Utilisateur').doc(userId);
-        final businessRef = FirebaseFirestore.instance.collection('Commercant').doc(userId);
+        final businessRef = FirebaseFirestore.instance.collection('Commerce').doc(userId);
 
         transaction.set(userRef, commercant.toMapUtilisateur());
         transaction.set(businessRef, commercant.toMapCommercant());
