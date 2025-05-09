@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart'; // Firebase core
+import 'views/admin/dashboard_widget.dart';
 import 'views/business/BusinessHomeView.dart';
 import 'views/customer/HomePage.dart';
 import 'views/customer/favourites_page.dart';
@@ -55,7 +56,7 @@ class QoffaApp extends StatelessWidget {
         // Ajoutez toutes les autres pages de l'application
         '/HomePage': (context) => HomePage(idUtilisateur: '', ),
         '/business_home': (context) => BusinessHomeView(idUtilisateur: '',),
-        // '/admin_home': (context) => AdminHomePage(),
+         '/admin_home': (context) => AdminDashboard(),
         '/home': (context) => const HomePage(idUtilisateur: ''),
         '/favorites': (context) => FavoriteShopsPage(),
        // '/cart': (context) => CartPage(),
