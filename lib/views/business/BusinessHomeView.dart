@@ -37,7 +37,7 @@ class _BusinessHomeViewState extends State<BusinessHomeView> {
             index: _pageIndex,
             height: 70.0, // Augmenter la hauteur de la navbar
             items: <Widget>[
-              SvgPicture.asset('assets/icons/home-2.svg', width: 30, height: 30),
+              SvgPicture.asset('assets/icons/home.svg', width: 30, height: 30),
               SvgPicture.asset('assets/icons/cart.svg', width: 30, height: 30),
               SvgPicture.asset('assets/icons/user.svg', width: 30, height: 30),
             ],

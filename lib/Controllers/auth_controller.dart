@@ -84,7 +84,7 @@ class AuthController extends ChangeNotifier {
           }
 
           final etatCompte = commerceDoc.data()?['etatCompteCommercant'];
-          if (etatCompte == "valide") {
+          if (etatCompte == "Verified") {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
