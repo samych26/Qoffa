@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../login_page.dart';
 import 'HomePage.dart';
 import 'account_info_view.dart';
 import 'confidentiality_view.dart';
@@ -105,7 +106,7 @@ class ProfileView extends StatelessWidget {
                   const Divider(color: Colors.white24),
                   _buildOption(context, "Order History", const OrderHistoryView()),
                   const Divider(color: Colors.white24),
-                  _buildOptionlogout(context, "Logout", const OrderHistoryView()),
+                  _buildOptionlogout(context, "Logout", const LoginPage()),
                   const Divider(color: Colors.white24),
                 ],
               ),

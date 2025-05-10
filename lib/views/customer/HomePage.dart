@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'commerce_page.dart';
 import 'fullMap.dart';
 import '../../Models/commerce_modele.dart';
 import '../../Controllers/customer/PanierController.dart';
@@ -794,95 +796,103 @@ class _HomePageState extends State<HomePage> {
 
 
 
+  Widget _buildShopCardFromCommercantGeneric(Commerce commerce, String imageAsset) {
+    final hasProfileImage = commerce.photoDeProfile.isNotEmpty;
 
-  Widget _buildShopCardFromCommercantGeneric(Commerce Commerce, String imageAsset) {
-    final hasProfileImage = Commerce.photoDeProfile.isNotEmpty;
-
-    return Padding(
-      padding: const EdgeInsets.only(top: 22.0),
-      // Padding en haut de chaque carte
-      child: Center( // Pour centrer horizontalement la carte
-        child: Container(
-          width: 351,
-          height: 190,
-          margin: const EdgeInsets.symmetric(horizontal: 8),
-          // Optionnel : espace entre les cartes
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 243, 233, 184),
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.25),
-                spreadRadius: 2,
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CommerceView(
+              commerceId: commerce.idUtilisateur, // Assurez-vous que votre modèle Commerce a un champ 'id'
+              userId: FirebaseAuth.instance.currentUser?.uid ?? '', // Gestion de l'userId
+            ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 4,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(top: 22.0),
+        child: Center(
+          child: Container(
+            width: 351,
+            height: 190,
+            margin: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 243, 233, 184),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.25),
+                  spreadRadius: 2,
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 4,
                     ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image(
-                    image: hasProfileImage
-                        ? NetworkImage(Commerce.photoDeProfile)
-                        : const AssetImage(
-                        'assets/images/img.png') as ImageProvider,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 110, // même hauteur pour les deux
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image(
+                      image: hasProfileImage
+                          ? NetworkImage(commerce.photoDeProfile)
+                          : const AssetImage('assets/images/img.png') as ImageProvider,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 110,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  // Nom à gauche, étoiles à droite
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 13.0),
-                        child: Text(
-                          Commerce.nomCommerce,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 13.0),
+                          child: Text(
+                            commerce.nomCommerce,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                    ),
-                    Row(
-                      children: const [
-                        Icon(Icons.star, color: Colors.amber, size: 16),
-                        Icon(Icons.star, color: Colors.amber, size: 16),
-                        Icon(Icons.star, color: Colors.amber, size: 16),
-                        Icon(Icons.star_half, color: Colors.amber, size: 16),
-                        Icon(Icons.star_border, color: Colors.amber, size: 16),
-                      ],
-                    ),
-                  ],
+                      Row(
+                        children: const [
+                          Icon(Icons.star, color: Colors.amber, size: 16),
+                          Icon(Icons.star, color: Colors.amber, size: 16),
+                          Icon(Icons.star, color: Colors.amber, size: 16),
+                          Icon(Icons.star_half, color: Colors.amber, size: 16),
+                          Icon(Icons.star_border, color: Colors.amber, size: 16),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
